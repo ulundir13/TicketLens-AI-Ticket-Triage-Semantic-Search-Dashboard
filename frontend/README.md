@@ -1,16 +1,110 @@
-# React + Vite
+TicketLens – AI Ticket Triage + Semantic Search
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+TicketLens is a full-stack AI-powered ticket management system that uses Sentence Transformers + FAISS vector search to perform semantic similarity matching on support tickets.
 
-Currently, two official plugins are available:
+It allows you to:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Create tickets
+- Store embeddings
+- Perform semantic search using cosine similarity
+- Run the entire stack via Docker
 
-## React Compiler
+Architecture
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+-Backend: FastAPI
+-Embeddings: sentence-transformers (all-MiniLM-L6-v2)
+-Vector Index: FAISS (IndexFlatIP with L2 normalization)
+-Frontend: React + Vite
+-Reverse Proxy: Nginx
+-Containerization: Docker (multi-stage builds)
+-Orchestration: Docker Compose
 
-## Expanding the ESLint configuration
+Run With Docker (Recommended)
+Requirements:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+-Docker Desktop installed
+-Docker Engine running
+
+One Command Startup
+
+From the project root:
+docker compose up --build
+
+This will:
+
+-Build backend container (FastAPI + FAISS)
+-Build frontend container (React + Nginx)
+-Start both services
+-Wire networking automatically
+
+Access the Application
+
+Frontend: http://localhost:5173
+
+Backend API Docs: http://localhost:8000/docs
+
+Health Check: http://localhost:8000/api/health
+
+Stop The Application
+
+Press: CTRL + C
+Or run: docker compose down
+
+Running Without Docker (Dev Mode)
+
+Backend:
+cd backend
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
+
+Frontend:
+cd frontend
+npm install
+npm run dev
+
+Frontend will run on: http://localhost:5173
+
+API Endpoints
+Method	Endpoint	Description
+GET	/api/health	Health check
+POST	/api/tickets	Create ticket
+GET	/api/tickets	List tickets
+GET	/api/tickets/{id}	Get ticket by ID
+POST	/api/search	Semantic search
+
+How Semantic Search Works
+
+1. Ticket description is embedded using: all-MiniLM-L6-v2
+2. Embeddings are normalized using faiss.normalize_L2
+3. Stored in a FAISS IndexFlatIP
+4. Query embeddings are normalized and searched via inner product
+5. Top-K results returned with similarity scores
+
+Frontend (Vite Template Info)
+
+This project uses React + Vite.
+
+The original Vite template includes:
+
+-@vitejs/plugin-react
+-Optional SWC plugin
+-HMR support
+-ESLint integration
+
+React Compiler is not enabled by default.
+
+Project Structure:
+backend/
+  Dockerfile
+  app/
+    main.py
+
+frontend/
+  Dockerfile
+  nginx.conf
+  src/
+
+docker-compose.yml
+requirements.txt

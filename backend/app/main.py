@@ -42,6 +42,10 @@ FAISS_TO_TICKET_ID = []
 def health():
     return {"status": "ok"}
 
+@app.get("/health")
+def health_legacy():
+    return {"status": "ok"}
+
 # ---------- CRUD ----------
 @app.post("/api/tickets", response_model=Ticket)
 def create_ticket(payload: TicketCreate):
