@@ -9,7 +9,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
 
   async function loadTickets() {
-    const res = await fetch("/tickets");
+    const res = await fetch("/api/tickets");
     const data = await res.json();
     setTickets(data);
   }
@@ -22,7 +22,7 @@ export default function App() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch("/tickets", {
+      const res = await fetch("/api/tickets", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, description }),
@@ -40,7 +40,7 @@ export default function App() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch("/search", {
+      const res = await fetch("/api/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query }),
@@ -56,7 +56,7 @@ export default function App() {
   return (
     <div style={{ fontFamily: "system-ui", maxWidth: 900, margin: "0 auto", padding: 24 }}>
       <h1>TicketLens</h1>
-      <p>AI Ticket Triage + Semantic Search (FastAPI + Sentence Transformers)</p>
+      <p>AI Ticket Triage + Semantic Search (FastAPI + Sentence Transformers + FAISS)</p>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
         <section style={{ border: "1px solid #ddd", borderRadius: 12, padding: 16 }}>
