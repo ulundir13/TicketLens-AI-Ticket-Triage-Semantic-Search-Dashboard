@@ -12,7 +12,7 @@ TicketLens is a full-stack AI-powered ticket management system that uses Sentenc
 ## Architecture
 
 - Backend: FastAPI
-- Embeddings: sentence-transformers (all-MiniLM-L6-v2)
+- Embeddings: SentenceTransformer("all-MiniLM-L6-v2")
 - Vector Index: FAISS (IndexFlatIP with L2 normalization)
 - Frontend: React + Vite
 - Reverse Proxy: Nginx
@@ -23,32 +23,16 @@ TicketLens is a full-stack AI-powered ticket management system that uses Sentenc
 
 ![TicketLens Architecture](docs/architecture.png)
 
-```mermaid
-flowchart LR
-    User[User Browser]
-    React[React Frontend (Vite)]
-    Nginx[Nginx Reverse Proxy]
-    API[FastAPI Backend]
-    Model[Sentence Transformer Model]
-    FAISS[FAISS Vector Index]
-
-    User --> React
-    React --> Nginx
-    Nginx --> API
-    API --> Model
-    Model --> FAISS
-    FAISS --> API
-    API --> React
-
 ## Run With Docker (Recommended)
 Requirements:
 
--Docker Desktop installed
--Docker Engine running
+- Docker Desktop installed
+- Docker Engine running
 
 ## One Command Startup
 
 From the project root:
+```bash
 docker compose up --build
 
 This will:
@@ -88,12 +72,13 @@ npm run dev
 Frontend will run on: http://localhost:5173
 
 ## API Endpoints
-Method	Endpoint	Description
-GET	/api/health	Health check
-POST	/api/tickets	Create ticket
-GET	/api/tickets	List tickets
-GET	/api/tickets/{id}	Get ticket by ID
-POST	/api/search	Semantic search
+| Method | Endpoint | Description |
+|--------|----------|------------|
+| GET | /api/health | Health check |
+| POST | /api/tickets | Create ticket |
+| GET | /api/tickets | List tickets |
+| GET | /api/tickets/{id} | Get ticket by ID |
+| POST | /api/search | Semantic search |
 
 ## How Semantic Search Works
 
